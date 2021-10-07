@@ -16,6 +16,12 @@ blueprint:
         target:
           entity:
             domain: light
+    switch_condition:
+      name: Switch
+      selector:
+        target:
+          entity:
+            domain: input_boolean            
     no_motion_wait:
       name: Wait time
       description: Time to leave the light on after last motion is detected.
@@ -38,6 +44,10 @@ trigger:
   to: "on"
 
 action:
+  - alias: "Only when Condition"
+    condition: state
+    entity_id: !switch_condition
+    state: "on"
   - alias: "Turn on the light"
     service: light.turn_on
     target: !input light_target
