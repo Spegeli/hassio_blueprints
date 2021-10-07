@@ -46,7 +46,7 @@ trigger:
 action:
   - alias: "Only when Condition"
     condition: state
-    entity_id: !switch_condition
+    entity_id: !input switch_condition
     state: "on"
   - alias: "Turn on the light"
     service: light.turn_on
