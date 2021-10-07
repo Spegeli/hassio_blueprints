@@ -19,9 +19,8 @@ blueprint:
     switch_condition:
       name: Switch
       selector:
-        target:
-          entity:
-            domain: input_boolean            
+        entity:
+          domain: input_boolean            
     no_motion_wait:
       name: Wait time
       description: Time to leave the light on after last motion is detected.
