@@ -1,3 +1,5 @@
+# Version: 0.3
+
 blueprint:
   name: Licht per Bewegungsmelder
   description: Licht per Bewegungsmelder Ein-/Ausschalten.
