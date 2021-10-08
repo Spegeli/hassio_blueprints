@@ -1,5 +1,5 @@
 blueprint:
-  name: Licht per Bewegungsmelder (v0.3)
+  name: Licht per Bewegungsmelder
   description: Licht per Bewegungsmelder Ein-/Ausschalten.
   domain: automation
   source_url: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
