@@ -19,7 +19,7 @@ blueprint:
             domain: light          
     no_motion_wait:
       name: Wartezeit
-      description: Zeit, um das Licht anzuschalten, nachdem die letzte Bewegung erkannt wurde.
+      description: Zeit, um das Licht auszuschalten, nachdem die letzte Bewegung erkannt wurde.
       default: 120
       selector:
         number:
