@@ -5,25 +5,20 @@ blueprint:
   source_url: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
   input:
     motion_entity:
-      name: Motion Sensor
+      name: Bewegungsmelder
       selector:
         entity:
           domain: binary_sensor
           device_class: motion
     light_target:
-      name: Light
+      name: Licht
       selector:
         target:
           entity:
-            domain: light
-    switch_condition:
-      name: Switch
-      selector:
-        entity:
-          domain: input_boolean            
+            domain: light          
     no_motion_wait:
-      name: Wait time
-      description: Time to leave the light on after last motion is detected.
+      name: Wartezeit
+      description: Zeit, um das Licht anzuschalten, nachdem die letzte Bewegung erkannt wurde.
       default: 120
       selector:
         number:
@@ -39,13 +34,8 @@ max_exceeded: silent
 trigger:
   platform: state
   entity_id: !input motion_entity
-  from: "off"
+# from: "off"
   to: "on"
-
-condition:
-  - condition: state
-    entity_id: !input switch_condition
-    state: "on"
 
 action:
   - alias: "Turn on the light"
