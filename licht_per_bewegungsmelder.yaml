@@ -35,7 +35,6 @@ max_exceeded: silent
 trigger:
   platform: state
   entity_id: !input motion_entity
-# from: "off"
   to: "on"
 
 action:
@@ -46,7 +45,6 @@ action:
     wait_for_trigger:
       platform: state
       entity_id: !input motion_entity
-      from: "on"
       to: "off"
   - alias: "Wait the number of seconds that has been set"
     delay: !input no_motion_wait
