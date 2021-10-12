@@ -1,9 +1,9 @@
-#Version 0.4
+#Version 0.5
 blueprint:
   name: Licht per Bewegungsmelder
   description: Licht per Bewegungsmelder Ein-/Ausschalten.
   domain: automation
-  source_url: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
+  source_url: https://github.com/Spegeli/hassio_blueprints/blob/main/licht_per_bewegungsmelder.yaml
   input:
     motion_entity:
       name: Bewegungsmelder
