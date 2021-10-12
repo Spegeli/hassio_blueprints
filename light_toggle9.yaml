@@ -49,16 +49,16 @@ trigger_variables:
 trigger:
 - platform: template
   value_template: >-
-     {{ ping_entity != none and is_state(ping_entity, 'on') }}
+     "{{ ping_entity is defined and is_state(ping_entity, 'on') }}"
 - platform: template
   value_template: >-
-     {{ motion_entity != none and is_state(motion_entity, 'on') }}
+     "{{ motion_entity is defined and is_state(motion_entity, 'on') }}"
 
 action:
   - choose:
       - conditions:
            - condition: template
-             value_template: "{{ ping_entity != none }}"
+             value_template: "{{ (ping_entity == none) }}"
         sequence:
           - service: light.turn_on
             target: !input light_target        
