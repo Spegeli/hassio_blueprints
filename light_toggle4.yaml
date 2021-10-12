@@ -58,7 +58,7 @@ action:
   - choose:
       - conditions:
            - condition: template
-           value_template: "{{ (ping_entity != none) }}"
+             value_template: "{{ (ping_entity != none) }}"
         sequence:
           - service: light.turn_on
             target: !input light_target        
@@ -70,7 +70,7 @@ action:
             target: !input light_target
       - conditions:
            - condition: template
-           value_template: "{{ (motion_entity != none) }}"
+             value_template: "{{ (motion_entity != none) }}"
         sequence:
           - service: light.turn_on
             target: !input light_target        
