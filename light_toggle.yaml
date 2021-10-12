@@ -73,5 +73,6 @@ action:
               platform: state
               entity_id: !input motion_entity
               to: "off"
+          - delay: !input no_motion_wait
           - service: light.turn_off
             target: !input light_target
