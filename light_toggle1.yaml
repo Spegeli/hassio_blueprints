@@ -7,14 +7,14 @@ blueprint:
   input:
     ping_entity:
       name: PING-Sensor
-      default: {}
+      default:
       selector:
         entity:
           domain: binary_sensor
           device_class: connectivity
     motion_entity:
       name: Bewegungsmelder
-      default: {}
+      default:
       selector:
         entity:
           domain: binary_sensor
