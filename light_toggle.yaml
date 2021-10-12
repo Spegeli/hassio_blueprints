@@ -1,0 +1,77 @@
+#Version 0.2
+blueprint:
+  name: Licht Ein-/Ausschalten (per Bewegungsmelder / PING-Sensor).
+  description: Licht per Bewegungsmelder oder basierend auf PING-Sensor Ein-/Ausschalten.
+  domain: automation
+  source_url: https://github.com/Spegeli/hassio_blueprints/edit/main/light-toggle.yaml
+  input:
+    ping_entity:
+      name: PING-Sensor
+      default: default: {}
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: connectivity
+    motion_entity:
+      name: Bewegungsmelder
+      default: default: {}
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion          
+    light_target:
+      name: Licht
+      selector:
+        target:
+          entity:
+            domain: light  
+    no_motion_wait:
+      name: Wartezeit
+      description: Zeit, um das Licht auszuschalten, nachdem die letzte Bewegung erkannt wurde (wird nur bei Bewegungsmelder benutzt).
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds            
+
+
+# If ping is detected within the delay,
+# we restart the script.
+mode: restart
+max_exceeded: silent
+
+trigger_variables:
+  ping_entity: !input ping_entity
+  motion_entity: !input motion_entity
+
+trigger:
+- platform: template
+  value_template: >-
+     {{ ping_entity != none and is_state(ping_entity, 'on') }}
+- platform: template
+  value_template: >-
+     {{ motion_entity != none and is_state(motion_entity, 'on') }}
+
+action:
+  - choose:
+      - conditions: "{{ ping_entity }}"
+        sequence:
+          - sservice: light.turn_on
+            target: !input light_target        
+          - wait_for_trigger:
+              platform: state
+              entity_id: !input ping_entity
+              to: "off"
+          - service: light.turn_off
+            target: !input light_target
+      - conditions: "{{ motion_entity }}"
+        sequence:
+          - sservice: light.turn_on
+            target: !input light_target        
+          - wait_for_trigger:
+              platform: state
+              entity_id: !input motion_entity
+              to: "off"
+          - service: light.turn_off
+            target: !input light_target
