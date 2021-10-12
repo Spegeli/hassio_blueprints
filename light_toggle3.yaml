@@ -7,6 +7,7 @@ blueprint:
   input:
     ping_entity:
       name: PING-Sensor
+      description: This sensor will trigger the turning on of the target entity.
       default:
       selector:
         entity:
@@ -14,6 +15,7 @@ blueprint:
           device_class: connectivity
     motion_entity:
       name: Bewegungsmelder
+      description: This sensor will trigger the turning on of the target entity.
       default:
       selector:
         entity:
@@ -28,22 +30,21 @@ blueprint:
     no_motion_wait:
       name: Wartezeit
       description: Zeit, um das Licht auszuschalten, nachdem die letzte Bewegung erkannt wurde (wird nur bei Bewegungsmelder benutzt).
-      default: 120
+      default: 0
       selector:
         number:
           min: 0
           max: 3600
           unit_of_measurement: seconds            
 
-
-# If ping is detected within the delay,
-# we restart the script.
 mode: restart
 max_exceeded: silent
 
 trigger_variables:
   ping_entity: !input ping_entity
   motion_entity: !input motion_entity
+  light_target: !input light_target  
+  no_motion_wait: !input no_motion_wait
 
 trigger:
 - platform: template
@@ -55,9 +56,11 @@ trigger:
 
 action:
   - choose:
-      - conditions: "{{ ping_entity }}"
+      - conditions:
+           - condition: template
+           value_template: "{{ (ping_entity != none) }}"
         sequence:
-          - sservice: light.turn_on
+          - service: light.turn_on
             target: !input light_target        
           - wait_for_trigger:
               platform: state
@@ -65,9 +68,11 @@ action:
               to: "off"
           - service: light.turn_off
             target: !input light_target
-      - conditions: "{{ motion_entity }}"
+      - conditions:
+           - condition: template
+           value_template: "{{ (motion_entity != none) }}"
         sequence:
-          - sservice: light.turn_on
+          - service: light.turn_on
             target: !input light_target        
           - wait_for_trigger:
               platform: state
