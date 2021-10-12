@@ -49,10 +49,10 @@ trigger_variables:
 trigger:
 - platform: template
   value_template: >-
-     {{ ping_entity is defined and is_state(ping_entity, 'on') }}
+     {{ is_state(ping_entity, 'on') }}
 - platform: template
   value_template: >-
-     {{ motion_entity is defined and is_state(motion_entity, 'on') }}
+     {{ is_state(motion_entity, 'on') }}
 
 action:
   - choose:
