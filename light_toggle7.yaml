@@ -8,7 +8,7 @@ blueprint:
     ping_entity:
       name: PING-Sensor
       description: This sensor will trigger the turning on of the target entity.
-      default: {}
+      default:
       selector:
         entity:
           domain: binary_sensor
@@ -16,7 +16,7 @@ blueprint:
     motion_entity:
       name: Bewegungsmelder
       description: This sensor will trigger the turning on of the target entity.
-      default: {}
+      default:
       selector:
         entity:
           domain: binary_sensor
@@ -55,29 +55,16 @@ trigger:
      {{ motion_entity != none and is_state(motion_entity, 'on') }}
 
 action:
-  - choose:
-      - conditions:
-           - condition: template
-             value_template: "{{ (ping_entity != none) }}"
-        sequence:
-          - service: light.turn_on
-            target: !input light_target        
-          - wait_for_trigger:
-              platform: state
-              entity_id: !input ping_entity
-              to: "off"
-          - service: light.turn_off
-            target: !input light_target
-      - conditions:
-           - condition: template
-             value_template: "{{ (motion_entity != none) }}"
-        sequence:
-          - service: light.turn_on
-            target: !input light_target        
-          - wait_for_trigger:
-              platform: state
-              entity_id: !input motion_entity
-              to: "off"
-          - delay: !input no_motion_wait
-          - service: light.turn_off
-            target: !input light_target
+  - alias: "Turn on the light"
+    service: light.turn_on
+    target: !input light_target
+  - alias: "Wait until there is no motion from device"
+    wait_for_trigger:
+      platform: state
+      entity_id: !input motion_entity
+      to: "off"
+  - alias: "Wait the number of seconds that has been set"
+    delay: !input no_motion_wait
+  - alias: "Turn off the light"
+    service: light.turn_off
+    target: !input light_target
