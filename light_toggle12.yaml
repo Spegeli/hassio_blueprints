@@ -1,0 +1,62 @@
+#Version 0.1
+blueprint:
+  name: TEST Licht Ein-/Ausschalten (per Bewegungsmelder / PING-Sensor).
+  description: Licht per Bewegungsmelder oder basierend auf PING-Sensor Ein-/Ausschalten.
+  domain: automation
+  #source_url: https://github.com/Spegeli/hassio_blueprints/edit/main/light-toggle.yaml
+  input:
+    sensor_entity:
+      name: Bewegungsmelder oder PING-Sensor
+      description: This sensor will trigger the turning on of the target entity.
+      selector:
+        entity:
+          domain: binary_sensor
+    light_target:
+      name: Licht
+      selector:
+        target:
+          entity:
+            domain: light          
+    no_motion_wait:
+      name: Wartezeit
+      description: Zeit, um das Licht auszuschalten, nachdem die letzte Bewegung erkannt wurde (wird nur bei Bewegungsmelder benutzt).
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
+
+# If motion is detected within the delay,
+# we restart the script.
+mode: restart
+max_exceeded: silent
+
+trigger:
+  platform: state
+  entity_id: !input sensor_entity
+  to: "on"
+
+variables:
+  var_sensor_entity: !input sensor_entity
+
+action:
+  - alias: "Turn on the light"
+    service: light.turn_on
+    target: !input light_target
+  - alias: "Wait until there is no motion from device"     
+    wait_for_trigger:
+      platform: state
+      entity_id: !input sensor_entity
+      to: "off"
+  - alias: "Wait the number of seconds that has been set"
+    delay:
+      seconds: >
+        {% if (is_state_attr(sensor_entity, 'device_class', "motion")) %}
+          0
+        {% else %}
+          0
+        {% endif %}
+  - alias: "Turn off the light"
+    service: light.turn_off
+    target: !input light_target
