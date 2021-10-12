@@ -8,7 +8,7 @@ blueprint:
     ping_entity:
       name: PING-Sensor
       description: This sensor will trigger the turning on of the target entity.
-      default:
+      default: {}
       selector:
         entity:
           domain: binary_sensor
@@ -16,7 +16,7 @@ blueprint:
     motion_entity:
       name: Bewegungsmelder
       description: This sensor will trigger the turning on of the target entity.
-      default:
+      default: {}
       selector:
         entity:
           domain: binary_sensor
