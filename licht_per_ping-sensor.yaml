@@ -3,6 +3,7 @@ blueprint:
   name: Licht per Ping-Sensor
   description: Licht basierend auf PING-Sensor Ein-/Ausschalten.
   domain: automation
+  source_url: https://github.com/Spegeli/hassio_blueprints/edit/main/licht_per_ping-sensor.yaml
   input:
     ping_entity:
       name: PING-Sensor
